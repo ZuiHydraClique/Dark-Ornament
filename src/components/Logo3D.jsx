@@ -80,7 +80,7 @@ function LogoModel() {
     const maxDim = Math.max(size.x, size.y, size.z)
 
     if (maxDim > 0) {
-      const s = 5.2 / maxDim
+      const s = 2.2 / maxDim
       m.scale.setScalar(s)
       const sc = center.clone().multiplyScalar(s)
       m.position.set(-sc.x, -sc.y, -sc.z)
