@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+  /*
+   * WICHTIG: overflow-x: clip statt hidden!
+   * "hidden" auf <html> deaktiviert scroll-behavior: smooth.
+   * "clip" verhindert horizontalen Overflow ohne ScrollContext zu zerstören.
+   */
+  html {
+    overflow-x: clip;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    overflow-x: clip;
+    @apply bg-dark text-accent font-sans;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #121212;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #b91c1c;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #ef4444;
+  }
+
+  *:focus-visible {
+    outline: 2px solid #b91c1c;
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .glass {
+    background: rgba(45, 45, 45, 0.45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .glass-dark {
+    background: rgba(18, 18, 18, 0.78);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(185, 28, 28, 0.2);
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-crimson text-white font-semibold rounded-sm transition-all duration-300 ease-out hover:bg-crimson-light hover:scale-[1.03] active:scale-95;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center gap-2 px-6 py-3 border border-crimson text-crimson font-semibold rounded-sm transition-all duration-300 ease-out hover:bg-crimson hover:text-white active:scale-95;
+  }
+
+  .section-title {
+    @apply font-display text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight;
+  }
+
+  .crimson-underline {
+    @apply relative inline-block after:absolute after:left-0 after:-bottom-1 after:h-[3px] after:w-full after:bg-crimson after:rounded-full;
+  }
+
+  .input-field {
+    @apply w-full bg-surface/60 border border-white/10 rounded-sm px-4 py-3 text-accent placeholder:text-gray-500 focus:outline-none focus:border-crimson transition-colors duration-200 text-sm;
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+  }
+
+  .ornament {
+    pointer-events: none;
+    user-select: none;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .clip-x {
+    overflow-x: clip;
+  }
+}
