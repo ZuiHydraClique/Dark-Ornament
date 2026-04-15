@@ -308,54 +308,60 @@ export default function StudioWalkthrough() {
               </motion.p>
 
               {/* Drei Bilder — responsiv: 1 Spalte mobil, 3 Spalten ab sm */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 w-full max-w-xs sm:max-w-2xl lg:max-w-4xl px-4 sm:px-8 pointer-events-auto">
-                {STOPS[activeStop].images.map((src, i) => (
-                  <motion.button
-                    key={`${activeStop}-${i}`}
-                    initial={{ opacity: 0, y: 24, scale: 0.92 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ delay: i * 0.13, duration: 0.5, ease: EASE }}
-                    className="relative overflow-hidden rounded-sm group cursor-pointer text-left"
-                    style={{
-                      border: '1px solid rgba(185,28,28,0.30)',
-                      boxShadow: '0 8px 32px rgba(0,0,0,0.55)',
-                    }}
-                    onClick={() => setLightbox({ src, label: STOPS[activeStop].labels[i] })}
-                    aria-label={`${STOPS[activeStop].labels[i]} vergrößern`}
-                  >
-                    {/* Bild */}
-                    <img
-                      src={src}
-                      alt={STOPS[activeStop].labels[i]}
-                      className="w-full aspect-[3/4] object-cover object-center transition-transform duration-700 group-hover:scale-110"
-                      loading="lazy"
-                    />
-
-                    {/* Hover: Lupe */}
-                    <div
-                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-                      style={{ background: 'rgba(0,0,0,0.38)' }}
+              <div className="grid grid-cols-3 gap-4 sm:gap-6 w-full max-w-xs sm:max-w-2xl lg:max-w-4xl px-4 sm:px-8 pointer-events-auto">
+                {/* Grid jetzt max-w-full, justify-center, Bilder max-w-[220px] auf Mobile */}
+                <div className="contents sm:contents flex flex-col sm:flex-row items-center justify-center w-full">
+                  {STOPS[activeStop].images.map((src, i) => (
+                    <motion.button
+                      key={`${activeStop}-${i}`}
+                      initial={{ opacity: 0, y: 24, scale: 0.92 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ delay: i * 0.13, duration: 0.5, ease: EASE }}
+                      className="relative overflow-hidden rounded-sm group cursor-pointer text-left flex flex-col items-center"
+                      style={{
+                        border: '1px solid rgba(185,28,28,0.30)',
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.55)',
+                        maxWidth: '220px',
+                        width: '100%',
+                        margin: '0 auto',
+                      }}
+                      onClick={() => setLightbox({ src, label: STOPS[activeStop].labels[i] })}
+                      aria-label={`${STOPS[activeStop].labels[i]} vergrößern`}
                     >
-                      <div
-                        className="w-10 h-10 rounded-full flex items-center justify-center"
-                        style={{ border: '1.5px solid rgba(255,255,255,0.75)' }}
-                      >
-                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <circle cx="11" cy="11" r="7" strokeWidth="2" />
-                          <path strokeLinecap="round" strokeWidth="2" d="M21 21l-4.35-4.35" />
-                          <path strokeLinecap="round" strokeWidth="2" d="M11 8v6M8 11h6" />
-                        </svg>
-                      </div>
-                    </div>
+                      {/* Bild */}
+                      <img
+                        src={src}
+                        alt={STOPS[activeStop].labels[i]}
+                        className="w-full aspect-[3/4] object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                        loading="lazy"
+                      />
 
-                    {/* Label */}
-                    <div className="absolute bottom-0 left-0 right-0 px-3 py-2 bg-gradient-to-t from-black/85 to-transparent">
-                      <p className="text-white text-[9px] font-semibold tracking-widest uppercase">
-                        {STOPS[activeStop].labels[i]}
-                      </p>
-                    </div>
-                  </motion.button>
-                ))}
+                      {/* Hover: Lupe */}
+                      <div
+                        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+                        style={{ background: 'rgba(0,0,0,0.38)' }}
+                      >
+                        <div
+                          className="w-10 h-10 rounded-full flex items-center justify-center"
+                          style={{ border: '1.5px solid rgba(255,255,255,0.75)' }}
+                        >
+                          <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="7" strokeWidth="2" />
+                            <path strokeLinecap="round" strokeWidth="2" d="M21 21l-4.35-4.35" />
+                            <path strokeLinecap="round" strokeWidth="2" d="M11 8v6M8 11h6" />
+                          </svg>
+                        </div>
+                      </div>
+
+                      {/* Label */}
+                      <div className="absolute bottom-0 left-0 right-0 px-3 py-2 bg-gradient-to-t from-black/85 to-transparent">
+                        <p className="text-white text-[9px] font-semibold tracking-widest uppercase">
+                          {STOPS[activeStop].labels[i]}
+                        </p>
+                      </div>
+                    </motion.button>
+                  ))}
+                </div>
               </div>
             </motion.div>
           )}
