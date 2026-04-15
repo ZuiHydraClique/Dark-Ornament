@@ -35,11 +35,11 @@ export default defineConfig({
          * Das halbiert ungefähr die Größe des Haupt-Chunks und
          * ermöglicht parallele Downloads beim ersten Load.
          */
-        manualChunks: {
-          'vendor-three':  ['three'],
-          'vendor-r3f':    ['@react-three/fiber'],
-          'vendor-drei':   ['@react-three/drei'],
-          'vendor-motion': ['framer-motion'],
+        manualChunks(id) {
+          if (id.includes('three')) return 'vendor-three';
+          if (id.includes('@react-three/fiber')) return 'vendor-r3f';
+          if (id.includes('@react-three/drei')) return 'vendor-drei';
+          if (id.includes('framer-motion')) return 'vendor-motion';
         },
       },
     },
