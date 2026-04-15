@@ -18,7 +18,7 @@ import logoUrl from '../assets/logo.glb?url'
  * clearcoat simuliert eine klare Decklackschicht auf dem Chrom-Effekt.
  */
 const CHROME = new THREE.MeshPhysicalMaterial({
-  color: new THREE.Color(0xFFFFFF),
+  color: new THREE.Color(0xDC143C),
   metalness: 1.0,
   roughness: 0.08,        // leicht geraut → Reflexionen weich/metallisch, kein Raum erkennbar
   reflectivity: 1.0,
@@ -28,7 +28,7 @@ const CHROME = new THREE.MeshPhysicalMaterial({
 })
 
 /* Ruherotation — Logo neigt sich leicht zur Seitenmitte */
-const BASE_ROT_X = 0.08   // minimaler Downward-Tilt
+const BASE_ROT_X = -0.18   // minimaler Downward-Tilt
 const BASE_ROT_Y = -0.40   // ca. -17° → Vorderfront schaut leicht nach links (zur Textseite)
 
 /* ══════════════════════════════════════════════════
@@ -52,8 +52,8 @@ function LogoModel() {
     if (!window.matchMedia('(pointer: fine)').matches) return
 
     const onMove = (e) => {
-      mouse.current.x = (e.clientX / window.innerWidth) * 4 - 1
-      mouse.current.y = -((e.clientY / window.innerHeight) * 4 - 1)
+      mouse.current.x = (e.clientX / window.innerWidth) * 6 - 1
+      mouse.current.y = -((e.clientY / window.innerHeight) * 6 - 1)
     }
     window.addEventListener('mousemove', onMove, { passive: true })
     return () => window.removeEventListener('mousemove', onMove)
@@ -120,7 +120,7 @@ function LogoModel() {
     w.rotation.y = curRotY.current
 
     /* ── AtemAnimation: sanfte Y-Sinuswelle ── */
-    w.position.y = Math.sin(state.clock.elapsedTime * 0.7) * 0.06
+    w.position.y = Math.sin(state.clock.elapsedTime * 0.7) * 0.02
   })
 
   return (
@@ -142,7 +142,7 @@ export default function Logo3D({ className = '' }) {
   return (
     <div className={className} aria-hidden="true">
       <Canvas
-        camera={{ position: [0, 0, 2.0], fov: 42 }}
+        camera={{ position: [0, 0, 1.5], fov: 42 }}
         gl={{ alpha: true, antialias: true, powerPreference: 'high-performance' }}
         dpr={[1, 2]}
         style={{ background: 'transparent' }}
@@ -156,15 +156,15 @@ export default function Logo3D({ className = '' }) {
         <Environment preset="studio" background={false} />
 
         {/* Hauptspot: harte Glanzlinie auf Chrome */}
-        <SpotLight position={[4, 7, 4]} intensity={50} color="#ffffff" angle={0.22} penumbra={0.5} distance={24} castShadow />
+        <SpotLight position={[4, -10, 4]} intensity={50} color="#ffffff" angle={0.62} penumbra={0.8} distance={14} castShadow />
 
         {/* Rim-Lights */}
-        <directionalLight position={[5, 3, 2]} intensity={1.0} color="#dde6ff" />
-        <directionalLight position={[0, -4, 5]} intensity={0.5} color="#8888aa" />
+        <directionalLight position={[5, 3, 2]} intensity={1.0} color="#ffffff" />
+        <directionalLight position={[0, -4, 5]} intensity={0.5} color="#ffffff" />
 
         {/* Crimson */}
-        <pointLight position={[-3, 4, 3]} intensity={3.5} color="#b91c1c" />
-        <pointLight position={[4, -2, 1]} intensity={1.0} color="#7f1d1d" />
+        <pointLight position={[-3, 4, 3]} intensity={3.5} color="#ffffff" />
+        <pointLight position={[4, -2, 1]} intensity={1.0} color="#ffffff" />
 
         <ambientLight intensity={0.4} />
 

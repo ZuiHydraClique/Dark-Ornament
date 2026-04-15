@@ -13,6 +13,8 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
+import Logo from '../assets/Logo.png'
+ 
 const NAV_LINKS = [
   { label: 'Galerie',     href: '#gallery' },
   { label: 'Über mich',  href: '#bio' },
@@ -71,13 +73,17 @@ export default function Navbar() {
             href="#hero"
             onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
             aria-label="DarkOrnament — Startseite"
-            className="group flex items-center gap-3"
+            className="group flex items-center gap-3 transition-all duration-700"
+            style={{
+              opacity: scrolled
+                ? '100%'
+                : '0%'
+            }}
           >
             {/* Vertikale Zierline */}
-            <span className="hidden sm:block w-px h-5 bg-crimson opacity-70 group-hover:h-7 transition-all duration-300" />
-            <span className="font-display font-bold text-base sm:text-lg tracking-[0.12em] text-white">
-              Dark<span className="text-crimson italic">Ornament</span>
-            </span>
+            <span className="flex flex-row font-display"><div className="text-red-600 font-bold">D</div>ark</span>
+            <span className="w-px h-5 bg-crimson opacity-70 group-hover:h-7 transition-all duration-300" />
+            <span className="flex flex-row font-display"><div className="text-red-600 font-bold">O</div>rnament</span>
           </a>
 
           {/* ── Desktop Links ── */}
@@ -87,7 +93,7 @@ export default function Navbar() {
                 <a
                   href={link.href}
                   onClick={(e) => { e.preventDefault(); smoothTo(link.href) }}
-                  className="relative text-[11px] font-semibold tracking-[0.25em] uppercase text-gray-400 hover:text-white transition-colors duration-300 group py-1"
+                  className="relative text-[12px] font-semibold tracking-[0.25em] uppercase text-gray-400 hover:text-white transition-colors duration-300 group py-1"
                 >
                   {link.label}
                   <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-crimson group-hover:w-full transition-all duration-400" />
@@ -100,7 +106,7 @@ export default function Navbar() {
               <a
                 href="#faq"
                 onClick={(e) => { e.preventDefault(); smoothTo('#faq') }}
-                className="text-[11px] font-semibold tracking-[0.25em] uppercase text-crimson/70 hover:text-crimson border border-crimson/30 hover:border-crimson px-3 py-1.5 transition-all duration-300"
+                className="text-[12px] font-bold tracking-[0.25em] uppercase text-crimson hover:text-crimson border border-crimson/50 hover:border-crimson px-3 py-1.5 transition-all duration-300"
               >
                 FAQ
               </a>
@@ -110,11 +116,10 @@ export default function Navbar() {
             <li>
               <a
                 href="#booking"
-                id="navbar-book-cta"
                 onClick={(e) => { e.preventDefault(); smoothTo('#booking') }}
-                className="relative text-[11px] font-bold tracking-[0.25em] uppercase text-white bg-crimson px-5 py-2.5 hover:bg-crimson-light transition-colors duration-300 overflow-hidden group"
+                className="relative text-[12px] font-bold tracking-[0.25em] uppercase text-white bg-crimson px-5 py-2.5 hover:bg-crimson-light transition-colors duration-300 overflow-hidden group"
               >
-                <span className="relative z-10">Jetzt buchen</span>
+                Jetzt buchen
               </a>
             </li>
           </ul>
