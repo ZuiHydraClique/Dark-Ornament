@@ -25,4 +25,24 @@ export default defineConfig({
     ],
   },
   assetsInclude: ['**/*.glb', '**/*.gltf'],
+  build: {
+    // Verhindert den Warning-Spam und erleichtert das Vercel-Build (kein CI-Abbruch)
+    chunkSizeWarningLimit: 2000,
+    rollupOptions: {
+      output: {
+        /*
+         * Three.js + R3F + Drei in eigene Vendor-Chunks aufteilen.
+         * Das halbiert ungefähr die Größe des Haupt-Chunks und
+         * ermöglicht parallele Downloads beim ersten Load.
+         */
+        manualChunks: {
+          'vendor-three':  ['three'],
+          'vendor-r3f':    ['@react-three/fiber'],
+          'vendor-drei':   ['@react-three/drei'],
+          'vendor-motion': ['framer-motion'],
+        },
+      },
+    },
+  },
 })
+

@@ -156,15 +156,15 @@ export default function Logo3D({ className = '' }) {
         <Environment preset="studio" background={false} />
 
         {/* Hauptspot: harte Glanzlinie auf Chrome */}
-        <SpotLight position={[4, -10, 4]} intensity={50} color="#ffffff" angle={0.62} penumbra={0.8} distance={14} castShadow />
+        <SpotLight position={[4, -10, 4]} intensity={5} color="#ff8e8e" angle={0.62} penumbra={0.8} distance={14} castShadow />
 
         {/* Rim-Lights */}
-        <directionalLight position={[5, 3, 2]} intensity={1.0} color="#ffffff" />
-        <directionalLight position={[0, -4, 5]} intensity={0.5} color="#ffffff" />
+        <directionalLight position={[5, 3, 2]} intensity={1.0} color="#ff8e8e" />
+        <directionalLight position={[0, -4, 5]} intensity={0.5} color="#ff8e8e" />
 
         {/* Crimson */}
-        <pointLight position={[-3, 4, 3]} intensity={3.5} color="#ffffff" />
-        <pointLight position={[4, -2, 1]} intensity={1.0} color="#ffffff" />
+        <pointLight position={[-3, 4, 3]} intensity={3.5} color="#ff8e8e" />
+        <pointLight position={[4, -2, 1]} intensity={1.0} color="#ff8e8e" />
 
         <ambientLight intensity={0.4} />
 

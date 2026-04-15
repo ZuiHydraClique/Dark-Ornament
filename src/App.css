@@ -1,3 +1,7 @@
+/* Blende Navbar aus, wenn Lightbox aktiv ist */
+body[data-lightbox-active] .navbar-root {
+  display: none !important;
+}
 .counter {
   font-size: 16px;
   padding: 5px 10px;

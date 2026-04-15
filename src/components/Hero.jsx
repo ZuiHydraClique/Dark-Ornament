@@ -17,9 +17,12 @@ export default function Hero() {
     >
       {/* ── Statischer Hintergrund (kein Parallax) ── */}
       <div className="absolute inset-0 w-full h-full" aria-hidden="true">
-        <img
+        <motion.img
           src={heroBg}
           alt=""
+          initial={{ opacity: 0, scale: 1.04 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.4, ease: EASE }}
           className="w-full h-full object-cover object-center"
           loading="eager"
           fetchPriority="high"

@@ -136,11 +136,32 @@ export default function StudioWalkthrough() {
   const [activeStop, setActiveStop] = useState(null)
   const [showHint, setShowHint] = useState(true)
   const [lightbox, setLightbox] = useState(null)  // { src, label } | null
+  const lightboxCanCloseOnScroll = useRef(false)
+
+  // Scrollen verhindern, solange die Lightbox aktiv ist
+  useEffect(() => {
+    if (lightbox) {
+      const originalOverflow = document.body.style.overflow
+      document.body.style.overflow = 'hidden'
+      // Sperre: Lightbox darf erst nach kurzer Zeit durch Scrollen geschlossen werden
+      lightboxCanCloseOnScroll.current = false
+      const timer = setTimeout(() => {
+        lightboxCanCloseOnScroll.current = true
+      }, 220)
+      return () => {
+        clearTimeout(timer)
+        document.body.style.overflow = originalOverflow
+      }
+    }
+  }, [lightbox])
 
   useEffect(() => {
     const onScroll = () => {
       const section = sectionRef.current
       if (!section) return
+
+      // Lightbox schließen, falls aktiv und Sperre abgelaufen
+      if (lightbox && lightboxCanCloseOnScroll.current) setLightbox(null)
 
       const rect = section.getBoundingClientRect()
       const scrollable = section.offsetHeight - window.innerHeight
@@ -148,7 +169,7 @@ export default function StudioWalkthrough() {
       const t = Math.max(0, Math.min(1, scrolled / scrollable))
 
       scrollProgress.current = t
-      setShowHint(t < 0.03)
+      setShowHint(t < 0.15)
 
       // Aktiven Stop ermitteln
       let next = null
@@ -162,7 +183,7 @@ export default function StudioWalkthrough() {
     window.addEventListener('scroll', onScroll, { passive: true })
     onScroll()
     return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  }, [lightbox])
 
   return (
     <section
@@ -172,7 +193,7 @@ export default function StudioWalkthrough() {
       style={{ height: '500vh' }}
     >
       {/* Sticky Viewport — bleibt 100 vh sichtbar während man scrollt */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden">
+      <div className="sticky top-[68px] h-[calc(100vh-68px)] w-full overflow-hidden">
 
         {/* ── Section-Label (oben, immer sichtbar) ── */}
         <div
@@ -216,12 +237,12 @@ export default function StudioWalkthrough() {
               key="hint"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 6 }}
+              exit={{ opacity: 0, y: 60 }}
               transition={{ duration: 0.55, ease: EASE }}
-              className="absolute bottom-9 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 pointer-events-none"
+              className="absolute bottom-9 z-10 w-full flex flex-col items-center gap-2 pointer-events-none"
               aria-hidden="true"
             >
-              <p className="text-gray-400 text-[9px] tracking-[0.45em] uppercase">
+              <p className="text-gray-200 text-[10px] tracking-[0.45em] uppercase">
                 Scroll zum Erkunden
               </p>
               <motion.div
@@ -286,17 +307,17 @@ export default function StudioWalkthrough() {
                 Stop {activeStop + 1} — Entdecke die Kunst
               </motion.p>
 
-              {/* Drei Bilder */}
-              <div className="grid grid-cols-3 gap-5 w-full max-w-2xl px-8 pointer-events-auto">
+              {/* Drei Bilder — responsiv: 1 Spalte mobil, 3 Spalten ab sm */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 w-full max-w-xs sm:max-w-2xl lg:max-w-4xl px-4 sm:px-8 pointer-events-auto">
                 {STOPS[activeStop].images.map((src, i) => (
                   <motion.button
                     key={`${activeStop}-${i}`}
                     initial={{ opacity: 0, y: 24, scale: 0.92 }}
-                    animate={{ opacity: 1, y: 0,  scale: 1   }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
                     transition={{ delay: i * 0.13, duration: 0.5, ease: EASE }}
                     className="relative overflow-hidden rounded-sm group cursor-pointer text-left"
                     style={{
-                      border:    '1px solid rgba(185,28,28,0.30)',
+                      border: '1px solid rgba(185,28,28,0.30)',
                       boxShadow: '0 8px 32px rgba(0,0,0,0.55)',
                     }}
                     onClick={() => setLightbox({ src, label: STOPS[activeStop].labels[i] })}
@@ -355,20 +376,25 @@ export default function StudioWalkthrough() {
             >
               <motion.div
                 initial={{ scale: 0.86, opacity: 0 }}
-                animate={{ scale: 1,    opacity: 1 }}
-                exit={{ scale: 0.88,   opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.88, opacity: 0 }}
                 transition={{ duration: 0.32, ease: EASE }}
                 className="relative flex flex-col items-center"
                 onClick={(e) => e.stopPropagation()}
               >
-                {/* Großes Bild */}
+                {/* Großes Bild — natürliche Proportionen, keine schwarzen Balken */}
                 <img
                   src={lightbox.src}
                   alt={lightbox.label}
-                  className="max-h-[80vh] max-w-[88vw] object-contain rounded-sm"
                   style={{
-                    border:    '1px solid rgba(185,28,28,0.40)',
+                    maxHeight: '68vh',
+                    maxWidth: '90vw',
+                    width: 'auto',
+                    height: '68vh',
+                    display: 'block',
+                    border: '1px solid rgba(185,28,28,0.40)',
                     boxShadow: '0 0 80px rgba(0,0,0,0.85), 0 0 0 1px rgba(185,28,28,0.12)',
+                    borderRadius: '2px',
                   }}
                 />
 
@@ -385,7 +411,7 @@ export default function StudioWalkthrough() {
                   className="absolute -top-4 -right-4 w-9 h-9 rounded-full flex items-center justify-center text-gray-400 hover:text-white transition-colors"
                   style={{
                     background: 'rgba(20,20,20,0.95)',
-                    border:     '1px solid rgba(255,255,255,0.12)',
+                    border: '1px solid rgba(255,255,255,0.12)',
                   }}
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

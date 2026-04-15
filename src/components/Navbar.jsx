@@ -13,8 +13,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-import Logo from '../assets/Logo.png'
-
 const NAV_LINKS = [
   { label: 'Galerie', href: '#gallery' },
   { label: 'Über mich', href: '#bio' },
@@ -56,7 +54,7 @@ export default function Navbar() {
     <>
       {/* ── Bar ── */}
       <header
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-700"
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-700 navbar-root"
         style={{
           background: scrolled
             ? 'rgba(12,12,12,0.82)'
@@ -65,6 +63,7 @@ export default function Navbar() {
           WebkitBackdropFilter: scrolled ? 'blur(18px)' : 'none',
           borderBottom: scrolled ? '1px solid rgba(185,28,28,0.15)' : '1px solid transparent',
         }}
+        data-navbar
       >
         <nav className="max-w-7xl mx-auto px-6 lg:px-10 h-[68px] flex items-center justify-between">
 
@@ -88,40 +87,33 @@ export default function Navbar() {
 
           {/* ── Desktop Links ── */}
           <ul className="hidden md:flex items-center gap-8" role="list">
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
+            {[
+              ...NAV_LINKS,
+              { label: 'FAQ', href: '#faq', extraClass: 'text-crimson hover:text-crimson border border-crimson/50 hover:border-crimson px-3 py-1.5 font-bold' },
+              { label: 'Jetzt buchen', href: '#booking', extraClass: 'text-white bg-crimson px-5 py-2.5 hover:bg-crimson-light font-bold', isCta: true },
+            ].map((link, i) => (
+              <motion.li
+                key={link.href}
+                initial={{ opacity: 0, y: -18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.13 * i + 0.15, duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
                 <a
                   href={link.href}
                   onClick={(e) => { e.preventDefault(); smoothTo(link.href) }}
-                  className="relative text-[12px] font-semibold tracking-[0.25em] uppercase text-gray-400 hover:text-white transition-colors duration-300 group py-1"
+                  className={
+                    'relative text-[12px] tracking-[0.25em] uppercase transition-colors duration-300 group py-1 ' +
+                    (link.extraClass || 'font-semibold text-gray-400 hover:text-white') +
+                    (link.isCta ? ' overflow-hidden' : '')
+                  }
                 >
                   {link.label}
-                  <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-crimson group-hover:w-full transition-all duration-400" />
+                  {!link.isCta && link.label !== 'FAQ' && (
+                    <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-crimson group-hover:w-full transition-all duration-400" />
+                  )}
                 </a>
-              </li>
+              </motion.li>
             ))}
-
-            {/* FAQ als minimaler Outlined-Tag */}
-            <li>
-              <a
-                href="#faq"
-                onClick={(e) => { e.preventDefault(); smoothTo('#faq') }}
-                className="text-[12px] font-bold tracking-[0.25em] uppercase text-crimson hover:text-crimson border border-crimson/50 hover:border-crimson px-3 py-1.5 transition-all duration-300"
-              >
-                FAQ
-              </a>
-            </li>
-
-            {/* Haupt-CTA */}
-            <li>
-              <a
-                href="#booking"
-                onClick={(e) => { e.preventDefault(); smoothTo('#booking') }}
-                className="relative text-[12px] font-bold tracking-[0.25em] uppercase text-white bg-crimson px-5 py-2.5 hover:bg-crimson-light transition-colors duration-300 overflow-hidden group"
-              >
-                Jetzt buchen
-              </a>
-            </li>
           </ul>
 
           {/* ── Mobile Burger (minimalistisch) ── */}
