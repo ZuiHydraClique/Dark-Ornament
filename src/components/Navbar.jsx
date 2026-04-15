@@ -91,13 +91,16 @@ export default function Navbar() {
               ...NAV_LINKS,
               { label: 'FAQ', href: '#faq', extraClass: 'text-crimson hover:text-crimson border border-crimson/50 hover:border-crimson px-3 py-1.5 font-bold' },
               { label: 'Jetzt buchen', href: '#booking', extraClass: 'text-white bg-crimson px-5 py-2.5 hover:bg-crimson-light font-bold', isCta: true },
-            ].map((link, i) => (
-              <motion.li
-                key={link.href}
-                initial={{ opacity: 0, y: -18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.13 * i + 0.15, duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
-              >
+            ].map((link, i, arr) => {
+              // Eindeutigen Key generieren: href + Index, falls mehrfach vorhanden
+              const key = arr.findIndex(l => l.href === link.href) !== i ? `${link.href}-${i}` : link.href
+              return (
+                <motion.li
+                  key={key}
+                  initial={{ opacity: 0, y: -18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.13 * i + 0.15, duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+                >
                 <a
                   href={link.href}
                   onClick={(e) => { e.preventDefault(); smoothTo(link.href) }}
@@ -112,8 +115,9 @@ export default function Navbar() {
                     <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-crimson group-hover:w-full transition-all duration-400" />
                   )}
                 </a>
-              </motion.li>
-            ))}
+                </motion.li>
+              )
+            })}
           </ul>
 
           {/* ── Mobile Burger (minimalistisch) ── */}
