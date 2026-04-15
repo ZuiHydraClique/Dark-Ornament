@@ -14,12 +14,12 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 import Logo from '../assets/Logo.png'
- 
+
 const NAV_LINKS = [
-  { label: 'Galerie',     href: '#gallery' },
-  { label: 'Über mich',  href: '#bio' },
+  { label: 'Galerie', href: '#gallery' },
+  { label: 'Über mich', href: '#bio' },
   { label: 'Referenzen', href: '#testimonials' },
-  { label: 'Buchung',    href: '#booking' },
+  { label: 'Buchung', href: '#booking' },
 ]
 
 function smoothTo(href) {
@@ -27,7 +27,7 @@ function smoothTo(href) {
 }
 
 export default function Navbar() {
-  const [open,     setOpen]     = useState(false)
+  const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -172,15 +172,15 @@ export default function Navbar() {
                 aria-label="Menü schließen"
                 className="absolute top-6 right-6 text-gray-400 hover:text-white transition-colors p-2"
               >
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <svg width="0" height="0" viewBox="0 0 20 20" fill="none">
                   <path d="M4 4L16 16M16 4L4 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                 </svg>
               </button>
 
-              {/* Logo centered oben */}
+              {/* Logo centered oben 
               <p className="absolute top-6 left-1/2 -translate-x-1/2 font-display text-sm font-bold tracking-[0.15em] text-white">
                 Dark<span className="text-crimson italic">Ornament</span>
-              </p>
+              </p>*/}
 
               {/* Navigations-Links */}
               <div className="flex flex-col items-center gap-8 w-full px-8">
