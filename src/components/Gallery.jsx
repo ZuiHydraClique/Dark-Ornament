@@ -1,93 +1,81 @@
+// Hilfsfunktion für Animationen
+function getCardVariants(index) {
+  const col = index % 3
+  if (col === 0) return { hidden: { opacity: 0, x: -70 }, visible: { opacity: 1, x: 0 } }
+  if (col === 2) return { hidden: { opacity: 0, x: 20 }, visible: { opacity: 1, x: 0 } }
+  return { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }
+}
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
-import { SectionDivider, FloatingOrnamentLeft, FloatingOrnamentRight } from './Ornaments'
-import tattoo1 from '../assets/tattoo_1.png'
-import tattoo2 from '../assets/tattoo_2.png'
-import tattoo3 from '../assets/tattoo_3.png'
-import tattoo4 from '../assets/tattoo_4.png'
-import tattoo5 from '../assets/tattoo_5.png'
-import tattoo6 from '../assets/tattoo_6.png'
+import { SectionDivider, FloatingOrnamentLeft, FloatingOrnamentRight, HeroOrnament } from './Ornaments'
+
+import video1 from '../assets/video_1.mp4'
+import video2 from '../assets/video_2.mp4'
+import video3 from '../assets/video_3.mp4'
 
 const EASE = [0.25, 0.46, 0.45, 0.94]
 
 const GALLERY_ITEMS = [
   {
     id: 1,
-    src: tattoo1,
-    title: 'Ornamentales Mandala',
-    style: 'Fine Line · Blackwork',
-    desc: 'Aufwendiges Mandala mit heiliger Geometrie und ultrafein gezeichneten Linien.',
+    src: video1,
+    title: 'Studio Walkthrough',
+    style: 'Studio Walkthrough',
+    desc: 'Ein Rundgang durch das Studio.',
+    href: 'https://example.com/video1'
   },
   {
     id: 2,
-    src: tattoo2,
-    title: 'Dunkles Sleeve',
-    style: 'Neo-Traditionell',
-    desc: 'Kraftvolles Neo-Traditional-Sleeve mit Rosen, Totenköpfen und Raben.',
+    src: video2,
+    title: 'Tattoo Prozess',
+    style: 'Video',
+    desc: 'Einblick in den Tätowierprozess.',
+    href: 'https://example.com/video2'
   },
   {
     id: 3,
-    src: tattoo3,
-    title: 'Koi & Wellen',
-    style: 'Japanisch · Irezumi',
-    desc: 'Japanisches Irezumi mit Koi-Fischen, Wellen und Kirschblüten.',
-  },
-  {
-    id: 4,
-    src: tattoo4,
-    title: 'Heilige Geometrie',
-    style: 'Dotwork · Geometrisch',
-    desc: 'Allsehendes Auge im Dreieck, umgeben von ornamentalen Schnörkeln.',
-  },
-  {
-    id: 5,
-    src: tattoo5,
-    title: 'Heilige Geometrie',
-    style: 'Dotwork · Geometrisch',
-    desc: 'Allsehendes Auge im Dreieck, umgeben von ornamentalen Schnörkeln.',
-  },
-  {
-    id: 6,
-    src: tattoo6,
-    title: 'Heilige Geometrie',
-    style: 'Dotwork · Geometrisch',
-    desc: 'Allsehendes Auge im Dreieck, umgeben von ornamentalen Schnörkeln.',
+    src: video3,
+    title: 'Kunstwerke',
+    style: 'Video · Kunst',
+    desc: 'Präsentation ausgewählter Kunstwerke.',
+    href: 'https://example.com/video3'
   }
 ]
-
-function getCardVariants(index) {
-  const col = index % 3
-  if (col === 0) return { hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }
-  if (col === 2) return { hidden: { opacity: 0, x: 20 }, visible: { opacity: 1, x: 0 } }
-  return { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }
-}
-
-function GalleryCard({ item, index, onClick }) {
+function GalleryCard({ item, index, delay = 0, className = '' }) {
   const variants = getCardVariants(index)
   return (
-    <motion.article
+    <motion.a
       variants={variants}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: false, margin: '-60px' }}
-      transition={{ duration: 0.85, delay: (index % 3) * 0.1, ease: EASE }}
-      className="relative group cursor-pointer overflow-hidden rounded-sm bg-surface aspect-[4/5]"
-      onClick={() => onClick(index)}
-      role="button"
-      tabIndex={0}
-      aria-label={`${item.title} in der Lightbox öffnen`}
-      onKeyDown={(e) => e.key === 'Enter' && onClick(index)}
+      transition={{ duration: 0.55, delay, ease: EASE }}
+      className={`relative group cursor-pointer block aspect-[4/5] md:aspect-[3/4] overflow-visible ${className}`}
+      href={item.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`${item.title} Video ansehen`}
     >
-      <img
-        src={item.src}
-        alt={item.title}
-        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-        loading="lazy"
-      />
+      <div className="relative mx-auto w-full h-full max-w-sm lg:max-w-none">
+        <div className="absolute -inset-3 border border-crimson/25 rounded-sm pointer-events-none" />
+        <div className="absolute -inset-6 border border-crimson/10 rounded-sm pointer-events-none" />
+        <video
+          src={item.src}
+          className="w-full h-full object-cover object-center rounded-sm transition-transform duration-700"
+          muted
+          autoPlay
+          loop
+          playsInline
+          preload="metadata"
+          tabIndex={-1}
+        />
+        <div className="absolute bottom-0 right-0 w-20 h-20 border-b-2 border-r-2 border-crimson rounded-br-sm" />
+        <div className="absolute top-0 left-0 w-20 h-20 border-t-2 border-l-2 border-crimson rounded-tl-sm" />
+      </div>
       <div className="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent
                       opacity-0 group-hover:opacity-100 transition-opacity duration-500
-                      flex flex-col justify-end p-5">
+                      flex flex-col justify-end p-5 pointer-events-none">
         <div className="translate-y-3 group-hover:translate-y-0 transition-transform duration-500">
           <p className="text-crimson text-[10px] font-semibold tracking-widest uppercase mb-1">{item.style}</p>
           <h3 className="text-white font-display text-xl font-bold">{item.title}</h3>
@@ -96,123 +84,75 @@ function GalleryCard({ item, index, onClick }) {
           <ZoomIn className="w-5 h-5 text-white/80" />
         </div>
       </div>
-      <div className="absolute top-3 left-3 bg-dark/70 backdrop-blur-sm border border-crimson/30 px-2 py-1 rounded-sm">
+      <div className="absolute top-3 left-3 bg-dark/70 backdrop-blur-sm border border-crimson/30 px-2 py-1 rounded-sm pointer-events-none">
         <span className="text-crimson text-[9px] sm:text-[10px] font-semibold tracking-wider uppercase">
           {item.style.split(' · ')[0]}
         </span>
       </div>
-    </motion.article>
+    </motion.a>
   )
 }
 
-function Lightbox({ items, activeIndex, onClose, onPrev, onNext }) {
-  const item = items[activeIndex]
-  if (!item) return null
-  return (
-    <AnimatePresence>
-      <motion.div
-        key="lightbox"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.35 }}
-        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4"
-        onClick={onClose}
-      >
-        <button onClick={onClose} className="absolute top-4 right-4 z-10 p-2 text-white/70 hover:text-white bg-surface/50 rounded-sm transition-colors" aria-label="Schließen">
-          <X className="w-6 h-6" />
-        </button>
-        <button onClick={(e) => { e.stopPropagation(); onPrev() }} className="absolute left-3 sm:left-6 z-10 p-3 text-white/70 hover:text-white bg-surface/50 rounded-sm transition-colors" aria-label="Vorheriges Bild">
-          <ChevronLeft className="w-6 h-6" />
-        </button>
-
-        <motion.div
-          key={activeIndex}
-          initial={{ scale: 0.94, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.94, opacity: 0 }}
-          transition={{ duration: 0.4, ease: EASE }}
-          className="relative max-w-3xl w-full max-h-[80vh] overflow-hidden rounded-sm glass"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <img src={item.src} alt={item.title} className="w-full max-h-[68vh] object-contain" />
-          <div className="p-5 border-t border-white/10">
-            <p className="text-crimson text-[10px] font-semibold tracking-widest uppercase mb-1">{item.style}</p>
-            <h3 className="font-display text-xl sm:text-2xl font-bold text-white mb-1">{item.title}</h3>
-            <p className="text-gray-400 text-sm">{item.desc}</p>
-          </div>
-        </motion.div>
-
-        <button onClick={(e) => { e.stopPropagation(); onNext() }} className="absolute right-3 sm:right-6 z-10 p-3 text-white/70 hover:text-white bg-surface/50 rounded-sm transition-colors" aria-label="Nächstes Bild">
-          <ChevronRight className="w-6 h-6" />
-        </button>
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-gray-400 text-sm">
-          {activeIndex + 1} / {items.length}
-        </div>
-      </motion.div>
-    </AnimatePresence>
-  )
-}
+// Lightbox wird nicht mehr benötigt, da Videos direkt verlinken
 
 export default function Gallery() {
-  const [lightboxIndex, setLightboxIndex] = useState(null)
+  // Animations-Delays für die drei Videos
+  const delays = [0.1, 0.2, 0.3]
 
   return (
-    <>
-      <section id="gallery" className="py-20 sm:py-28 relative overflow-x-clip">
-        <FloatingOrnamentLeft />
-        <FloatingOrnamentRight />
+    <section id="gallery" className="py-20 sm:py-28 relative overflow-x-clip">
+      <FloatingOrnamentLeft />
+      <FloatingOrnamentRight />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, x: -18 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false, margin: '-60px' }}
-            transition={{ duration: 0.9, ease: EASE }}
-            className="mb-12 sm:mb-16"
-          >
-            <p className="text-crimson text-[10px] sm:text-sm font-semibold tracking-[0.4em] uppercase mb-4">meine Arbeit</p>
-            <h2 className="section-title"><span className="crimson-underline">Gallerie</span></h2>
-            <p className="text-gray-400 mt-5 max-w-xl text-sm sm:text-base leading-relaxed">
-              Jedes Stück ist eine Zusammenarbeit — ein dauerhafter Ausdruck deiner Geschichte, gefertigt mit sorgfältigem Handwerk und bewusster Intention.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5">
-            {GALLERY_ITEMS.map((item, i) => (
-              <GalleryCard key={item.id} item={item} index={i} onClick={setLightboxIndex} />
-            ))}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Custom Grid: ab md zwei Spalten, links großes Video (row-span-2), rechts zwei kleine untereinander */}
+        <div
+          className="grid grid-cols-1 md:grid-cols-[2fr_0.3fr_1fr] md:grid-rows-2 gap-4 lg:gap-6"
+        >
+          {/* Großes Video links (nimmt 2 Zeilen ein) */}
+          <GalleryCard
+            item={GALLERY_ITEMS[0]}
+            index={0}
+            delay={delays[0]}
+            className="md:row-span-2 md:col-span-1"
+          />
+          {/* Abstandhalter mit Mandala-Ornament */}
+          <div className="hidden md:flex md:col-span-1 md:row-span-2 items-center justify-center relative" >
           </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false }}
-            transition={{ delay: 0.3, duration: 0.9, ease: EASE }}
-            className="mt-12 sm:mt-14"
-          >
-            <a
-              href="#booking"
-              onClick={(e) => { e.preventDefault(); document.querySelector('#booking')?.scrollIntoView({ behavior: 'smooth' }) }}
-              className="btn-primary inline-flex"
-            >
-              Ein individuelles Werk beauftragen
-            </a>
-          </motion.div>
+          {/* Kleines Video oben rechts */}
+          <GalleryCard
+            item={GALLERY_ITEMS[1]}
+            index={1}
+            delay={delays[1]}
+            className="md:col-span-1 md:row-span-1"
+          />
+          {/* Kleines Video unten rechts */}
+          <GalleryCard
+            item={GALLERY_ITEMS[2]}
+            index={2}
+            delay={delays[2]}
+            className="md:col-span-1 md:row-span-1"
+          />
         </div>
 
-        <SectionDivider className="mt-16 sm:mt-24 opacity-50" />
-      </section>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false }}
+          transition={{ delay: 0.3, duration: 0.9, ease: EASE }}
+          className="mt-12 sm:mt-14"
+        >
+          {/* <a
+            href="#booking"
+            onClick={(e) => { e.preventDefault(); document.querySelector('#booking')?.scrollIntoView({ behavior: 'smooth' }) }}
+            className="btn-primary inline-flex"
+          >
+            Ein individuelles Werk beauftragen
+          </a> */}
+        </motion.div>
+      </div>
 
-      {lightboxIndex !== null && (
-        <Lightbox
-          items={GALLERY_ITEMS}
-          activeIndex={lightboxIndex}
-          onClose={() => setLightboxIndex(null)}
-          onPrev={() => setLightboxIndex((i) => (i - 1 + GALLERY_ITEMS.length) % GALLERY_ITEMS.length)}
-          onNext={() => setLightboxIndex((i) => (i + 1) % GALLERY_ITEMS.length)}
-        />
-      )}
-    </>
+      <SectionDivider className="mt-16 sm:mt-24 opacity-50" />
+    </section>
   )
 }

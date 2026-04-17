@@ -37,12 +37,12 @@ export default function StartAnimation({ onFinish }) {
       {!done && (
         <motion.div
           key="start-anim"
-          initial={{ opacity: 1 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.7 }}
+          initial={{ opacity: 1 , y: 30}}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -100 }}
+          transition={{ duration: 1.9, ease: 'easeOut'}}
           className="fixed inset-0 z-[9999] bg-dark"
-          style={{ background: 'radial-gradient(ellipse 80% 80% at 50% 50%, #18181b 0%, #0d0d0d 100%)' }}
+          style={{ background: 'radial-gradient(ellipse 80% 80% at 50% 50%, #1f1111 0%, #0d0d0d 120%)' }}
         >
           <div
             style={{

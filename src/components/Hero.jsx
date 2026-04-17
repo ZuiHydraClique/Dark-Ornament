@@ -4,7 +4,7 @@ import { ChevronDown } from 'lucide-react'
 import heroBg from '../assets/hero_bg.png'
 import Logo3D from './Logo3D'
 
-const EASE = [0.25, 0.46, 0.45, 0.94]
+const EASE = [0.25, 0.26, 0.45, 0.94]
 
 export default function Hero() {
   const scrollToGallery = () =>
@@ -82,7 +82,7 @@ export default function Hero() {
             transition={{ duration: 0.9, delay: 0.48, ease: EASE }}
             className="text-gray-300 text-sm sm:text-base max-w-md mb-3 leading-relaxed"
           >
-            Fine Line · Blackwork · Realismus
+            Fine Line · Blackwork · Ornament
           </motion.p>
           <motion.p
             initial={{ opacity: 0 }}

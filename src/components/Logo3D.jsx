@@ -20,15 +20,15 @@ import logoUrl from '../assets/logo.glb?url'
 const CHROME = new THREE.MeshPhysicalMaterial({
   color: new THREE.Color(0xDC143C),
   metalness: 1.0,
-  roughness: 0.08,        // leicht geraut → Reflexionen weich/metallisch, kein Raum erkennbar
-  reflectivity: 1.0,
+  roughness: 0.1,        // leicht geraut → Reflexionen weich/metallisch, kein Raum erkennbar
+  reflectivity: 1.5,
   clearcoat: 0.9,         // leichte Klarlackschicht → Tiefeneffekt
   clearcoatRoughness: 0.2,
   envMapIntensity: 2.0,
 })
 
 /* Ruherotation — Logo neigt sich leicht zur Seitenmitte */
-const BASE_ROT_X = -0.18   // minimaler Downward-Tilt
+const BASE_ROT_X = -0.28   // minimaler Up-Tilt
 const BASE_ROT_Y = -0.40   // ca. -17° → Vorderfront schaut leicht nach links (zur Textseite)
 
 /* ══════════════════════════════════════════════════
@@ -113,14 +113,14 @@ function LogoModel() {
     const targetX = BASE_ROT_X + mouse.current.y * -0.22
     const targetY = BASE_ROT_Y + mouse.current.x * 0.30
 
-    curRotX.current = THREE.MathUtils.lerp(curRotX.current, targetX, 0.04)
-    curRotY.current = THREE.MathUtils.lerp(curRotY.current, targetY, 0.04)
+    curRotX.current = THREE.MathUtils.lerp(curRotX.current, targetX, 0.05)
+    curRotY.current = THREE.MathUtils.lerp(curRotY.current, targetY, 0.05)
 
     w.rotation.x = curRotX.current
     w.rotation.y = curRotY.current
 
     /* ── AtemAnimation: sanfte Y-Sinuswelle ── */
-    w.position.y = Math.sin(state.clock.elapsedTime * 0.7) * 0.02
+    w.position.y = Math.sin(state.clock.elapsedTime * 1.2) * 0.02
   })
 
   return (
@@ -153,17 +153,16 @@ export default function Logo3D({ className = '' }) {
          * roughness=0.08 an MeshPhysicalMaterial macht Reflexionen weich genug
          * dass man keinen Raum erkennt, die Metallik aber klar ist.
          */}
-        <Environment preset="studio" background={false} />
+        <Environment preset="studio" rotation={[0, Math.PI / 2, 0]} background={false} />
 
         {/* Hauptspot: harte Glanzlinie auf Chrome */}
-        <SpotLight position={[4, -10, 4]} intensity={5} color="#ff8e8e" angle={0.62} penumbra={0.8} distance={14} castShadow />
+        <SpotLight position={[4, -10, 4]} intensity={1} color="#ff8e8e" angle={0.62} penumbra={0.8} distance={34} />
 
         {/* Rim-Lights */}
         <directionalLight position={[5, 3, 2]} intensity={1.0} color="#ff8e8e" />
-        <directionalLight position={[0, -4, 5]} intensity={0.5} color="#ff8e8e" />
+        <directionalLight position={[0, 0, 1]} intensity={0.5} color="#ff8e8e" />
 
         {/* Crimson */}
-        <pointLight position={[-3, 4, 3]} intensity={3.5} color="#ff8e8e" />
         <pointLight position={[4, -2, 1]} intensity={1.0} color="#ff8e8e" />
 
         <ambientLight intensity={0.4} />
